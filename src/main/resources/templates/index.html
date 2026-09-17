@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            margin: 0;
+            padding: 40px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #2f5bff, #7b61ff);
+            color: white;
+            padding: 25px 30px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .content {
+            display: flex;
+            gap: 30px;
+            padding: 30px;
+        }
+        .form-card, .table-card {
+            flex: 1;
+            background: #fafbff;
+            border: 1px solid #e5e7ef;
+            border-radius: 10px;
+            padding: 25px;
+        }
+        h2 {
+            margin-top: 0;
+            color: #1d2a4f;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        label {
+            font-weight: 600;
+            color: #2b2d42;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dfe3ef;
+            border-radius: 8px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #2f5bff;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px 10px;
+            border-bottom: 1px solid #e5e7ef;
+        }
+        th {
+            background: #eef2ff;
+            color: #27355f;
+        }
+        .delete-button {
+            background: #e74c3c;
+            text-decoration: none;
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">Student Management</div>
+        <div class="content">
+            <div class="form-card">
+                <h2>Add Student</h2>
+                <form th:action="@{/save}" th:object="${student}" method="post">
+                    <div>
+                        <label>Name</label>
+                        <input type="text" th:field="*{name}" placeholder="Enter name" required>
+                    </div>
+                    <div>
+                        <label>Department</label>
+                        <input type="text" th:field="*{department}" placeholder="Enter department" required>
+                    </div>
+                    <div>
+                        <label>Age</label>
+                        <input type="number" th:field="*{age}" placeholder="Enter age" required>
+                    </div>
+                    <button type="submit">Save Student</button>
+                </form>
+            </div>
+
+            <div class="table-card">
+                <h2>Student List</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Age</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="stu : ${students}">
+                            <td th:text="${stu.id}">1</td>
+                            <td th:text="${stu.name}">Name</td>
+                            <td th:text="${stu.department}">Department</td>
+                            <td th:text="${stu.age}">20</td>
+                            <td>
+                                <a class="delete-button" th:href="@{/delete/{id}(id=${stu.id})}">Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
