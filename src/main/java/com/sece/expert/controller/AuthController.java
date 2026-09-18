@@ -1,7 +1,7 @@
-package com.sece.student.controller;
+package com.sece.expert.controller;
 
-import com.sece.student.entity.Studententity;
-import com.sece.student.repository.StudentRepository;
+import com.sece.expert.entity.studententity;
+import com.sece.expert.repository.studentrepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,14 +14,14 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 public class AuthController {
 
-    private final StudentRepository studentRepository;
+    private final studentrepository repository;
 
-    public AuthController(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
+    public AuthController(studentrepository repository) {
+        this.repository = repository;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, String>> register(@RequestBody Studententity student) {
+    public ResponseEntity<Map<String, String>> register(@RequestBody studententity student) {
         Map<String, String> response = new HashMap<>();
 
         if (student.getUsername() == null || student.getUsername().trim().isEmpty()) {
@@ -34,24 +34,21 @@ public class AuthController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        // Check whether the username already exists in the database
-        Optional<Studententity> existingStudent = studentRepository.findByUsername(student.getUsername());
+        Optional<studententity> existingStudent = repository.findByUsername(student.getUsername());
 
-        // If username already exists → return proper error message
         if (existingStudent.isPresent()) {
             response.put("message", "Username already exists");
             return ResponseEntity.badRequest().body(response);
         }
 
-        // If username is new → save the student and return success message
-        Studententity savedStudent = studentRepository.save(student);
+        studententity savedStudent = repository.save(student);
         response.put("message", "Registration Successful");
         response.put("studentName", savedStudent.getName());
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody Studententity loginRequest) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody studententity loginRequest) {
         Map<String, String> response = new HashMap<>();
 
         if (loginRequest.getUsername() == null || loginRequest.getUsername().trim().isEmpty()) {
@@ -59,24 +56,20 @@ public class AuthController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        // Check if the username exists
-        Optional<Studententity> existingStudent = studentRepository.findByUsername(loginRequest.getUsername());
+        Optional<studententity> existingStudent = repository.findByUsername(loginRequest.getUsername());
 
-        // If username does not exist → return "Username not found"
         if (existingStudent.isEmpty()) {
             response.put("message", "Username not found");
             return ResponseEntity.badRequest().body(response);
         }
 
-        Studententity student = existingStudent.get();
+        studententity student = existingStudent.get();
 
-        // If password is incorrect → return "Invalid Password"
         if (student.getPassword() == null || !student.getPassword().equals(loginRequest.getPassword())) {
             response.put("message", "Invalid Password");
             return ResponseEntity.badRequest().body(response);
         }
 
-        // If both username and password are correct → return "Login Successful" along with student name
         response.put("message", "Login Successful");
         response.put("studentName", student.getName());
         return ResponseEntity.ok(response);

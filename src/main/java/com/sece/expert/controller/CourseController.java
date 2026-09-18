@@ -1,7 +1,7 @@
-package com.sece.student.controller;
+package com.sece.expert.controller;
 
-import com.sece.student.entity.Course;
-import com.sece.student.repository.CourseRepository;
+import com.sece.expert.entity.Course;
+import com.sece.expert.repository.CourseRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,41 +10,40 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/courses")
 @CrossOrigin(origins = "*")
 public class CourseController {
 
-    private final CourseRepository courseRepository;
+    private final CourseRepository repository;
 
-    public CourseController(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
+    public CourseController(CourseRepository repository) {
+        this.repository = repository;
     }
 
-    // 1. Get all courses
-    @GetMapping
+    // GET all courses
+    @GetMapping({"/course", "/courses"})
     public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+        return repository.findAll();
     }
 
-    // 2. Get course by ID
-    @GetMapping("/{id}")
+    // GET course by ID
+    @GetMapping({"/course/{id}", "/courses/{id}"})
     public ResponseEntity<Course> getCourseById(@PathVariable int id) {
-        return courseRepository.findById(id)
+        return repository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // 3. Create new course
-    @PostMapping
+    // POST create course
+    @PostMapping({"/course", "/courses"})
     public ResponseEntity<Course> createCourse(@RequestBody Course course) {
-        Course savedCourse = courseRepository.save(course);
+        Course savedCourse = repository.save(course);
         return new ResponseEntity<>(savedCourse, HttpStatus.CREATED);
     }
 
-    // 4. Update existing course
-    @PutMapping("/{id}")
+    // PUT update course
+    @PutMapping({"/course/{id}", "/courses/{id}"})
     public ResponseEntity<Course> updateCourse(@PathVariable int id, @RequestBody Course courseDetails) {
-        Optional<Course> existingCourseOpt = courseRepository.findById(id);
+        Optional<Course> existingCourseOpt = repository.findById(id);
 
         if (existingCourseOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -64,18 +63,18 @@ public class CourseController {
             existingCourse.setFees(courseDetails.getFees());
         }
 
-        Course updatedCourse = courseRepository.save(existingCourse);
+        Course updatedCourse = repository.save(existingCourse);
         return ResponseEntity.ok(updatedCourse);
     }
 
-    // 5. Delete course
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCourse(@PathVariable int id) {
-        if (!courseRepository.existsById(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found with ID " + id);
+    // DELETE course
+    @DeleteMapping({"/course/{id}", "/courses/{id}"})
+    public String deleteCourse(@PathVariable int id) {
+        if (!repository.existsById(id)) {
+            return "Course not found!";
         }
 
-        courseRepository.deleteById(id);
-        return ResponseEntity.ok("Course deleted successfully");
+        repository.deleteById(id);
+        return "Course deleted successfully!";
     }
 }

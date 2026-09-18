@@ -1,4 +1,4 @@
-package com.sece.student.entity;
+package com.sece.expert.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "students")
-public class Studententity {
+public class studententity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,10 +20,10 @@ public class Studententity {
     private String username;
     private String password;
 
-    public Studententity() {
+    public studententity() {
     }
 
-    public Studententity(int id, String name, String department, int age, String username, String password) {
+    public studententity(int id, String name, String department, int age, String username, String password) {
         this.id = id;
         this.name = name;
         this.department = department;
@@ -82,7 +82,7 @@ public class Studententity {
 
     @Override
     public String toString() {
-        return "Studententity{" +
+        return "studententity{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", department='" + department + '\'' +

@@ -1,6 +1,6 @@
-package com.sece.student.repository;
+package com.sece.expert.repository;
 
-import com.sece.student.entity.Course;
+import com.sece.expert.entity.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

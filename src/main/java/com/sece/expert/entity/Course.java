@@ -1,4 +1,4 @@
-package com.sece.student.entity;
+package com.sece.expert.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +16,7 @@ public class Course {
 
     private String courseName;
     private String department;
-    private int duration; // in months
+    private int duration;
     private double fees;
 
     public Course() {
